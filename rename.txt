@@ -1,0 +1,15 @@
+# Récupérer les fichiers dans le dossier actuel
+$files = Get-ChildItem -Path "." -Filter "*.png"
+
+foreach ($file in $files) {
+    # Supprimer la partie "_00002_" du nom de fichier
+    $newName = $file.Name -replace "_\d+_", ""
+
+    # Vérifier si le nouveau nom est différent et n'existe pas déjà
+    if ($file.Name -ne $newName -and !(Test-Path $newName)) {
+        Rename-Item -Path $file.FullName -NewName $newName
+        Write-Output "Renommé : $($file.Name) -> $newName"
+    } else {
+        Write-Output "Non renommé : $($file.Name) (conflit ou déjà correct)"
+    }
+}
